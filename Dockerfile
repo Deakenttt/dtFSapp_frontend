@@ -1,7 +1,7 @@
 FROM node:20-alpine
-
-WORKDIR /app
-
+# create a directory called: app, and put everything under it
+WORKDIR /App_FRONTEND
+# bring all the json file to    WORKDIR
 COPY package*.json .
 
 RUN npm install
