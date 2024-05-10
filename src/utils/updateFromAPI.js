@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Construct URL with query parameters
-const BASE_URL = 'http://127.0.0.1:5000'
+const BASE_URL = 'https://dtfsappbackend-production.up.railway.app'
 
 export const updateFromAPI = async ( url, inputData ) => {
   const options = {
