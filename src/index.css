@@ -1,0 +1,4 @@
+/* margining the <input> <button> and <label> */
+input, button, label {
+  margin-top: 10px;
+}
