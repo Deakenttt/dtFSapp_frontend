@@ -32,16 +32,17 @@
 # CMD ["npm", "run", "dev"]
 
 # Use an official Node.js runtime as the base image
-FROM node:18-alpine as builder
+FROM node:19.4-bullseye AS build
 
-# Set the working directory in the container
-WORKDIR /app
+# Specify working directory other than /
+WORKDIR /usr/src/app
 
-# Copy package.json and yarn.lock to the working directory
-COPY package.json ./
+# Copy only files required to install
+# dependencies (better layer caching)
+COPY package*.json ./
 
 # Install project dependencies
-RUN npm install --no-cache-dir
+RUN npm install
 
 # Copy the rest of the application code to the working directory
 COPY . .
@@ -49,14 +50,12 @@ COPY . .
 # Build the Vite project, this may take a while (time consuming)
 RUN npm run build
 
-# Use Nginx as the base image for serving the Vite app
-FROM nginx:alpine
+# Use separate stage for deployable image
+FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
 
-# Copy the built Vite app from the previous stage to the nginx public directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Use COPY --link to avoid breaking cache if we change the second stage base image
+COPY --link nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 to the outside world
-# EXPOSE 80
+COPY --link --from=build usr/src/app/dist/ /usr/share/nginx/html
 
-# Command to start Nginx when the container starts
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8080
