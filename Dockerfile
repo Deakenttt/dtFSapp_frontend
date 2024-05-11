@@ -50,6 +50,8 @@ COPY . .
 # Build the Vite project, this may take a while (time consuming)
 RUN npm run build
 
+CMD ["npm", "run", "dev"]
+
 # # Use separate stage for deployable image
 # FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
 
