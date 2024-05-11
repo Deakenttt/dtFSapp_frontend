@@ -5,7 +5,7 @@ FROM node:18-alpine as BUILD_IMAGE
 WORKDIR /app/react-app
 
 # copy package.json .
-COPY package.jason .
+COPY package.json .
 
 # include all our package 
 
